@@ -1,0 +1,48 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'etc'
+require 'socket'
+hn = Socket.gethostname.split('.')
+hostname = hn[0]
+dnsdomain = hn[1..-1].join('.')
+vm_name = ENV['VM_NAME'] || "#{hostname}-009"
+vm_hostname = vm_name  # "#{hostname}-#{vm_name}"
+my_mac=`awk -F'; ' '$3 ~ /#{vm_hostname}/ {print $2}' /.autodirect/LIT/SCRIPTS/DHCPD/list`
+
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+  config.vm.box_check_update = false
+
+  # public network. FIXME: hardcoded bridge name: br0
+  config.vm.network :public_network, :dev => "br0", :mode => "bridge", :type => "bridge",
+	:mac => my_mac
+  # grep dev-
+
+  # LIBVIRT provider BEGIN
+  config.vm.provider :libvirt do |libvirt|
+    # libvirt.storage_pool_name = 'default'
+    libvirt.driver = "kvm"
+    libvirt.memory = 2048
+    libvirt.cpus = 2
+    libvirt.graphics_ip = '0.0.0.0'
+    libvirt.machine_type = 'q35'
+    libvirt.emulator_path = '/usr/bin/qemu-system-x86_64'
+    libvirt.default_prefix = ''  # hostname   # like dev-r-vrt-079
+    libvirt.management_network_name = 'default'
+    libvirt.management_network_address = '192.168.122.0/24'
+    # libvirt.mgmt_attach = false
+  end
+  # LIBVIRT provider END
+
+  # now, create VMs
+  config.vm.define vm_name do |domain|
+    domain.vm.hostname = "#{vm_hostname}.#{dnsdomain}"
+    domain.vm.provider :libvirt do |libvirt|
+    end
+    domain.vm.network "forwarded_port", guest: 80, host: 8080
+    script = "provision_mofed_vm.sh"
+    domain.vm.provision "shell", :path => script, :privileged => true
+  end  # end of :master domain
+end
