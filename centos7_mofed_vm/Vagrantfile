@@ -3,6 +3,9 @@
 
 require 'etc'
 require 'socket'
+require_relative '../qemu_hostdev_lookup.rb'
+include QemuHostdevLookup
+
 hn = Socket.gethostname.split('.')
 hostname = hn[0]
 dnsdomain = hn[1..-1].join('.')
@@ -40,7 +43,11 @@ Vagrant.configure("2") do |config|
   config.vm.define vm_name do |domain|
     domain.vm.hostname = "#{vm_hostname}.#{dnsdomain}"
     domain.vm.provider :libvirt do |libvirt|
-        libvirt.pci :bus => '0x04', :slot => '0x04', :function => '0x1'
+        vfs = find_free_vf()
+        unless(vfs.empty?) 
+          bus,slot,func = vfs[0].split(/[:.]/).map{|x| "0x#{x}"}
+          libvirt.pci :bus => bus, :slot => slot, :function => func
+        end
     end
     domain.vm.network "forwarded_port", guest: 80, host: 8080
     script = "provision_mofed_vm.sh"

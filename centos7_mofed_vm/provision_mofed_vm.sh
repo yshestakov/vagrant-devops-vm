@@ -77,7 +77,7 @@ cd ${MLNX_OFED_TGZ%.tgz}
 # /etc/init.d/mlnx-en.d start
 
 # MLNX_OFED:
-yes | ./mlnxofedinstall --dpdk --guest --with-nvmf
+yes | ./mlnxofedinstall --dpdk --guest --with-nvmf --without-fw-update
 #   load kernel modules
 /etc/init.d/openibd start
 
