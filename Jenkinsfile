@@ -6,7 +6,7 @@ pipeline {
   environment {
       VM_NAME = 'dev-r-vrt-122-022'
       VAGRANT_DEFAULT_PROVIDER = 'libvirt'
-      # MLNX_OFED_URL = '...'
+      // MLNX_OFED_URL = '...'
   }
   stages {
     stage('CreateVM') {
