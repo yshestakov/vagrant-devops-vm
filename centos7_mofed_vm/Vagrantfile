@@ -51,6 +51,7 @@ Vagrant.configure("2") do |config|
     end
     domain.vm.network "forwarded_port", guest: 80, host: 8080
     script = "provision_mofed_vm.sh"
-    domain.vm.provision "shell", :path => script, :privileged => true
+    domain.vm.provision "shell", :path => script, :privileged => true,
+       :env => {"MLNX_OFED_URL" => "#{ENV['MLNX_OFED_URL']}"}
   end  # end of :master domain
 end
