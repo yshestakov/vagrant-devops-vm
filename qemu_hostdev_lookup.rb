@@ -1,5 +1,5 @@
-#!/usr/bin/env ruby
 #!/opt/vagrant/embedded/bin/ruby
+#!/usr/bin/env ruby
 require 'nokogiri'
 
 
