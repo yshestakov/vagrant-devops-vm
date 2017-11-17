@@ -9,7 +9,7 @@ PV_blacklist = ['15b3:1003', '15b3:1013', '15b3:1011']
 module QemuHostdevLookup
     def get_mlnx_FVs()
         mlnx_devs = Hash.new
-        IO.popen(['lspci', '-n']) { |lspci|
+        IO.popen(['/usr/sbin/lspci', '-n']) { |lspci|
           body = lspci.read
           body.lines do |line|
             _addr,_class,_id = line.split(' ')
