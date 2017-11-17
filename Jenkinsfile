@@ -19,7 +19,7 @@ pipeline {
     stage('Test') {
       steps {
         echo 'Testing ...'
-        sh 'cd centos7_mofed_vm ; sudo vagrant VM_NAME=$VMNAME ssh -- "ping -c3 11.212.122.1"'
+        sh 'cd centos7_mofed_vm ; sudo VM_NAME=$VMNAME vagrant  ssh -- "ping -c3 11.212.122.1"'
       }
     }
   }
