@@ -12,13 +12,13 @@ pipeline {
     stage('CreateVM') {
       steps {
         echo 'Create VM: $VM_NAME ...'
-        sh 'cd centos_mofed_vm ; vagrant up'
+        sh 'cd centos7_mofed_vm ; vagrant up'
       }
     }
     stage('Test') {
       steps {
         echo 'Testing ...'
-        sh 'cd centos_mofed_vm ; vagrant ssh "ping -c3 11.212.122.1"'
+        sh 'cd centos7_mofed_vm ; vagrant ssh "ping -c3 11.212.122.1"'
       }
     }
   }
