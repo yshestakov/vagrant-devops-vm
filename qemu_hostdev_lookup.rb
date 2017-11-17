@@ -23,6 +23,8 @@ module QemuHostdevLookup
     end
 
     def find_free_vf()
+        # solution #3
+        # virsh dumpxml vmname | xmllint --xpath '//hostdev/source/address'
         mlnx_devs = get_mlnx_FVs()
         Dir.foreach(QEMU_LIBVIRT_DIR) do |item|
             next unless item.end_with? '.xml'

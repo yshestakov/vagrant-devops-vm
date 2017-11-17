@@ -12,6 +12,7 @@ pipeline {
     stage('CreateVM') {
       steps {
         echo 'Create VM: $VM_NAME ...'
+        // vagrant-libvirt 
         sh 'cd centos7_mofed_vm ; vagrant up'
       }
     }
