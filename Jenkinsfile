@@ -11,15 +11,19 @@ pipeline {
   stages {
     stage('CreateVM') {
       steps {
-        echo 'Create VM: $VM_NAME ...'
+        sh 'echo "Create VM: $VM_NAME ..."'
         // vagrant-libvirt 
-        sh 'cd centos7_mofed_vm ; sudo vagrant up'
-      }
+        withEnv(['VM_NAME=dev-r-vrt-122-022']) {
+          sh 'cd centos7_mofed_vm ; sudo vagrant up'
+        }
+      }  
     }
     stage('Test') {
       steps {
         echo 'Testing ...'
-        sh 'cd centos7_mofed_vm ; sudo vagrant ssh "ping -c3 11.212.122.1"'
+        withEnv(['VM_NAME=dev-r-vrt-122-022']) {
+          sh 'cd centos7_mofed_vm ; sudo vagrant ssh "ping -c3 11.212.122.1"'
+        }
       }
     }
   }
