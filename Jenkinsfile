@@ -13,13 +13,13 @@ pipeline {
       steps {
         echo 'Create VM: $VM_NAME ...'
         // vagrant-libvirt 
-        sh 'cd centos7_mofed_vm ; vagrant up'
+        sh 'cd centos7_mofed_vm ; sudo vagrant up'
       }
     }
     stage('Test') {
       steps {
         echo 'Testing ...'
-        sh 'cd centos7_mofed_vm ; vagrant ssh "ping -c3 11.212.122.1"'
+        sh 'cd centos7_mofed_vm ; sudo vagrant ssh "ping -c3 11.212.122.1"'
       }
     }
   }
